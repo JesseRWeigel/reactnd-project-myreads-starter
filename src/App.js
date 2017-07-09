@@ -16,6 +16,10 @@ class BooksApp extends React.Component {
   }
 
   componentDidMount = () => {
+    this.getBooks()
+  }
+
+  getBooks = () => {
     BooksAPI.getAll()
     .then(books => {
       this.setState({ books })
@@ -35,19 +39,38 @@ class BooksApp extends React.Component {
     BooksAPI.update({id: bookID}, shelf )
   }
 
+  searchBooks = (value) => {
+    BooksAPI.search(value)
+    .then(books => {
+      this.setState({ books })
+      console.log(books)
+    })
+  }
+
   render() {
     return (
       <div className="app">
         {this.state.showSearchPage ? (
           <div className="search-books">
             <div className="search-books-bar">
-              <a className="close-search" onClick={() => this.setState({ showSearchPage: false })}>Close</a>
+              <a className="close-search" onClick={() => {
+                this.getBooks()
+                this.setState({ showSearchPage: false })
+              }}>Close</a>
               <div className="search-books-input-wrapper">
-                <input type="text" placeholder="Search by title or author"/>
+                <input type="text" placeholder="Search by title or author" onKeyUp={(event) => this.searchBooks(event.target.value)}/>
               </div>
             </div>
             <div className="search-books-results">
-              <ol className="books-grid"></ol>
+              <ol className="books-grid">
+                {this.state.books
+                .map(book =>
+                  <Book bookID={book.id} image={book.imageLinks.thumbnail} title={book.title} authors={book.authors}
+                  shelf={book.shelf} onShelfChange={(bookID, shelf) => {
+                    this.moveBook(bookID, shelf)
+                  }} />
+                )}
+              </ol>
             </div>
           </div>
         ) : (
@@ -105,7 +128,7 @@ class BooksApp extends React.Component {
               </div>
             </div>
             <div className="open-search">
-              <a onClick={() => this.setState({ showSearchPage: true })}>Add a book</a>
+              <a onClick={() => this.setState({ showSearchPage: true, books: [] })}>Add a book</a>
             </div>
           </div>
         )}

@@ -10,7 +10,6 @@ const Book = (props) => (
           <select
             value={props.shelf}
             onChange={(event) => props.onShelfChange(props.bookID, event.target.value)}
-
           >
             <option value="none" disabled>Move to...</option>
             <option value="currentlyReading">Currently Reading</option>
