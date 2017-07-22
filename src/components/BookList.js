@@ -35,6 +35,7 @@ class BookList extends React.Component {
           <div>
             {this.state.shelves.map(shelf =>
               <BookShelf
+                key={shelf.shelf}
                 title={shelf.title}
                 books={this.props.books}
                 shelf={shelf.shelf}
