@@ -1,8 +1,7 @@
 import React from 'react'
-import './App.css'
+import '../App.css'
 
 const Book = (props) => (
-  <li key={props.bookID}>
     <div className="book">
       <div className="book-top">
         <div className="book-cover" style={{ width: 128, height: 193, backgroundImage: `url("${props.image}")` }}></div>
@@ -20,9 +19,8 @@ const Book = (props) => (
         </div>
       </div>
       <div className="book-title">{props.title}</div>
-      <div className="book-authors">{props.authors.map(author => <span style={{display: 'block'}}>{author}</span>)}</div>
+      <div className="book-authors">{props.authors && props.authors.map(author => <span key={author + props.bookID} style={{display: 'block'}}>{author}</span>)}</div>
     </div>
-  </li>
 )
 
 export default Book
