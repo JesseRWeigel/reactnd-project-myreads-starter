@@ -29,6 +29,11 @@
     ]
   },
   "standard": {
+    "globals": [
+      "fetch",
+      "localStorage",
+      "it"
+    ],
     "parser": "babel-eslint"
   }
 }
