@@ -29,12 +29,6 @@ class BooksApp extends React.Component {
     BooksAPI.update({ id: bookID }, shelf)
   }
 
-  searchBooks = value => {
-    BooksAPI.search(value).then(books => {
-      this.setState({ books })
-    })
-  }
-
   render () {
     return (
       <div className='app'>
@@ -43,8 +37,6 @@ class BooksApp extends React.Component {
           path='/search'
           render={() =>
             <BookSearch
-              books={this.state.books}
-              searchBooks={value => this.searchBooks(value)}
               onShelfChange={(bookID, shelf) => {
                 this.moveBook(bookID, shelf)
               }}
