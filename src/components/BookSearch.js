@@ -11,7 +11,9 @@ class BookSearch extends React.Component {
 
   searchBooks = value => {
     BooksAPI.search(value).then(books => {
-      this.setState({ books })
+      if (this.state.books !== books) {
+        this.setState({ books })
+      }
     })
   }
 
