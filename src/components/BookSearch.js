@@ -11,8 +11,19 @@ class BookSearch extends React.Component {
 
   searchBooks = value => {
     BooksAPI.search(value).then(books => {
-      if (this.state.books !== books) {
-        this.setState({ books })
+      if (books && books.length > 0) {
+        if (this.state.books !== books) {
+          books.map(bookInResults =>
+            this.props.books.map(function (bookInProps) {
+              if (bookInProps.id === bookInResults.id) {
+                return (bookInResults.shelf = bookInProps.shelf)
+              } else {
+                return (bookInResults.shelf = 'none')
+              }
+            })
+          )
+          this.setState({ books })
+        }
       }
     })
   }
@@ -36,8 +47,8 @@ class BookSearch extends React.Component {
           <ol className='books-grid'>
             {this.state.books &&
               this.state.books.length > 0 &&
-              this.state.books.map(book =>
-                <li key={book.id + book.title}>
+              this.state.books.map((book, i) =>
+                <li key={book.id + book.title + i}>
                   <Book
                     bookID={book.id}
                     image={book.imageLinks && book.imageLinks.thumbnail}

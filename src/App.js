@@ -10,6 +10,10 @@ class BooksApp extends React.Component {
     books: []
   }
 
+  componentDidMount = () => {
+    this.getBooks()
+  }
+
   getBooks = () => {
     BooksAPI.getAll().then(books => {
       this.setState({ books })
@@ -40,6 +44,7 @@ class BooksApp extends React.Component {
               onShelfChange={(bookID, shelf) => {
                 this.moveBook(bookID, shelf)
               }}
+              books={this.state.books}
             />}
         />
 
