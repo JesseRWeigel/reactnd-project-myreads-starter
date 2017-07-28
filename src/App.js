@@ -10,10 +10,6 @@ class BooksApp extends React.Component {
     books: []
   }
 
-  componentDidMount = () => {
-    this.getBooks()
-  }
-
   getBooks = () => {
     BooksAPI.getAll().then(books => {
       this.setState({ books })
@@ -29,8 +25,18 @@ class BooksApp extends React.Component {
         return b
       })
     }))
-
+    console.log(shelf)
     BooksAPI.update({ id: bookID }, shelf)
+  }
+
+  clearState = () => {
+    this.setState({ books: [] })
+  }
+
+  searchBooks = value => {
+    BooksAPI.search(value).then(books => {
+      this.setState({ books })
+    })
   }
 
   render () {
@@ -45,6 +51,8 @@ class BooksApp extends React.Component {
                 this.moveBook(bookID, shelf)
               }}
               books={this.state.books}
+              clearState={this.clearState}
+              searchBooks={value => this.searchBooks(value)}
             />}
         />
 
