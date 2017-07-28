@@ -7,35 +7,45 @@ import './App.css'
 
 class BooksApp extends React.Component {
   state = {
-    books: []
+    books: [],
+    searchResults: []
   }
 
-  getBooks = () => {
+  componentDidMount = () => {
     BooksAPI.getAll().then(books => {
       this.setState({ books })
     })
   }
 
-  moveBook = (bookID, shelf) => {
+  moveBook = (book, shelf) => {
+    book.shelf = shelf
     this.setState(state => ({
-      books: state.books.map(b => {
-        if (b.id === bookID) {
-          b.shelf = shelf
-        }
-        return b
-      })
+      books: state.books.filter(b => b.id !== book.id).concat([book])
     }))
-    console.log(shelf)
-    BooksAPI.update({ id: bookID }, shelf)
+    BooksAPI.update(book, shelf)
   }
 
   clearState = () => {
     this.setState({ books: [] })
   }
 
+  // searchBooks = value => {
+  //   BooksAPI.search(value).then(books => {
+  //     this.setState({searchResults: books})
+  //   })
+  // }
+
   searchBooks = value => {
     BooksAPI.search(value).then(books => {
-      this.setState({ books })
+      if (books.error || !books) return
+
+      const adjustedSearchResults = books.map(book => {
+        const existingBook = this.state.books.find(b => b.id === book.id)
+        book.shelf = existingBook ? existingBook.shelf : 'none'
+        return book
+      })
+
+      this.setState({ searchResults: adjustedSearchResults })
     })
   }
 
@@ -47,10 +57,10 @@ class BooksApp extends React.Component {
           path='/search'
           render={() =>
             <BookSearch
-              onShelfChange={(bookID, shelf) => {
-                this.moveBook(bookID, shelf)
+              onShelfChange={(book, shelf) => {
+                this.moveBook(book, shelf)
               }}
-              books={this.state.books}
+              books={this.state.searchResults}
               clearState={this.clearState}
               searchBooks={value => this.searchBooks(value)}
             />}
@@ -63,8 +73,8 @@ class BooksApp extends React.Component {
             <BookList
               books={this.state.books}
               getBooks={this.getBooks}
-              onShelfChange={(bookID, shelf) => {
-                this.moveBook(bookID, shelf)
+              onShelfChange={(book, shelf) => {
+                this.moveBook(book, shelf)
               }}
             />}
         />

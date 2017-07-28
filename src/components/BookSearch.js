@@ -4,10 +4,6 @@ import Book from './Book'
 import '../App.css'
 
 class BookSearch extends React.Component {
-  componentDidMount = () => {
-    this.props.clearState()
-  }
-
   render () {
     return (
       <div className='search-books'>
@@ -30,6 +26,7 @@ class BookSearch extends React.Component {
               this.props.books.map((book, i) =>
                 <li key={book.id + book.title + i}>
                   <Book
+                    book={book}
                     bookID={book.id}
                     image={book.imageLinks && book.imageLinks.thumbnail}
                     title={book.title}

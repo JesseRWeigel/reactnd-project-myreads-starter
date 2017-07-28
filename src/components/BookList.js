@@ -21,10 +21,6 @@ class BookList extends React.Component {
     ]
   }
 
-  componentDidMount = () => {
-    this.props.getBooks()
-  }
-
   render () {
     return (
       <div className='list-books'>

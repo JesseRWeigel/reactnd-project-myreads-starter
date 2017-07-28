@@ -14,6 +14,7 @@ const BookShelf = props =>
           props.books.filter(book => book.shelf === props.shelf).map(book =>
             <li key={book.id + book.title}>
               <Book
+                book={book}
                 bookID={book.id}
                 image={book.imageLinks && book.imageLinks.thumbnail}
                 title={book.title}
