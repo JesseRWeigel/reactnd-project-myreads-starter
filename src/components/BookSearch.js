@@ -15,7 +15,7 @@ class BookSearch extends React.Component {
             <input
               type='text'
               placeholder='Search by title or author'
-              onKeyUp={event => this.props.searchBooks(event.target.value)}
+              onChange={event => this.props.searchBooks(event.target.value)}
             />
           </div>
         </div>

@@ -1,5 +1,6 @@
 import React from 'react'
 import { Route } from 'react-router-dom'
+import debounce from 'lodash.debounce'
 import * as BooksAPI from './BooksAPI'
 import BookSearch from './components/BookSearch'
 import BookList from './components/BookList'
@@ -25,19 +26,9 @@ class BooksApp extends React.Component {
     BooksAPI.update(book, shelf)
   }
 
-  clearState = () => {
-    this.setState({ books: [] })
-  }
-
-  // searchBooks = value => {
-  //   BooksAPI.search(value).then(books => {
-  //     this.setState({searchResults: books})
-  //   })
-  // }
-
-  searchBooks = value => {
+  debouncedSearch = value => {
     BooksAPI.search(value).then(books => {
-      if (books.error || !books) return
+      if (!books || books.error) return
 
       const adjustedSearchResults = books.map(book => {
         const existingBook = this.state.books.find(b => b.id === book.id)
@@ -47,6 +38,12 @@ class BooksApp extends React.Component {
 
       this.setState({ searchResults: adjustedSearchResults })
     })
+  }
+
+  debouncer = debounce(this.debouncedSearch, 200)
+
+  searchBooks = value => {
+    this.debouncer(value)
   }
 
   render () {
